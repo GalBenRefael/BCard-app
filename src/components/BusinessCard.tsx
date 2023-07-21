@@ -61,8 +61,7 @@ export function BusinessCard({
                         <tbody>
                             <tr>
                                 <td>
-                                    {context?.user?.isAdmin ||
-                                        (context?.user?.isBiz && (
+                                    {context?.user?.isAdmin  && (
                                             <button
                                                 className='btn btn-default'
                                                 onClick={() =>
@@ -73,7 +72,7 @@ export function BusinessCard({
                                             >
                                                 <i className='bi bi-trash' />
                                             </button>
-                                        ))}
+                                        )}
 
                                     {isMyCardPage && (
                                         <Link
