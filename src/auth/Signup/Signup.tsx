@@ -286,7 +286,7 @@ function Signup() {
                                 value={state}
                                 onChange={(e) => setState(e.target.value)}
                             />
-                            <label htmlFor='floatingInput'>State</label>
+                            <label htmlFor='floatingInput'>State &#42;</label>
                         </div>
                         <div className='form-floating right-input'>
                             <input
@@ -298,7 +298,7 @@ function Signup() {
                                 onChange={(e) => setCountry(e.target.value)}
                             />
                             <label htmlFor='floatingPassword'>
-                                Country &#42;
+                                Country 
                             </label>
                         </div>
                     </div>

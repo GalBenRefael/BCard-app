@@ -113,7 +113,7 @@ function CreateCard({ fetchBusinesses }: CreateCardProps) {
                                 value={bizTitle}
                                 onChange={(e) => setBizTitle(e.target.value)}
                             />
-                            <label htmlFor='floatingInput'>Title</label>
+                            <label htmlFor='floatingInput'>Title &#42;</label>
                         </div>
                         <div className='form-floating right-input'>
                             <input
@@ -123,7 +123,7 @@ function CreateCard({ fetchBusinesses }: CreateCardProps) {
                                 value={bizSubTitle}
                                 onChange={(e) => setbizSubTitle(e.target.value)}
                             />
-                            <label htmlFor='floatingPassword'>Subtitle</label>
+                            <label htmlFor='floatingPassword'>Subtitle &#42;</label>
                         </div>
                     </div>
                     <div className='d-flex'>
@@ -137,7 +137,7 @@ function CreateCard({ fetchBusinesses }: CreateCardProps) {
                                     setBizDescription(e.target.value)
                                 }
                             />
-                            <label htmlFor='floatingInput'>Description</label>
+                            <label htmlFor='floatingInput'>Description &#42;</label>
                         </div>
                         <div className='form-floating right-input'>
                             <input
@@ -147,7 +147,7 @@ function CreateCard({ fetchBusinesses }: CreateCardProps) {
                                 value={bizPhone}
                                 onChange={(e) => setBizPhone(e.target.value)}
                             />
-                            <label htmlFor='floatingPassword'>Phone</label>
+                            <label htmlFor='floatingPassword'>Phone &#42;</label>
                         </div>
                     </div>
                     <div className='d-flex'>
@@ -159,7 +159,7 @@ function CreateCard({ fetchBusinesses }: CreateCardProps) {
                                 value={bizEmail}
                                 onChange={(e) => setBizEmail(e.target.value)}
                             />
-                            <label htmlFor='floatingInput'>Email address</label>
+                            <label htmlFor='floatingInput'>Email &#42;</label>
                         </div>
                         <div className='form-floating right-input'>
                             <input
@@ -213,7 +213,7 @@ function CreateCard({ fetchBusinesses }: CreateCardProps) {
                                 value={bizCountry}
                                 onChange={(e) => setBizCountry(e.target.value)}
                             />
-                            <label htmlFor='floatingPassword'>Country</label>
+                            <label htmlFor='floatingPassword'>Country &#42;</label>
                         </div>
                     </div>
                     <div className='d-flex'>
@@ -225,7 +225,7 @@ function CreateCard({ fetchBusinesses }: CreateCardProps) {
                                 value={bizCity}
                                 onChange={(e) => setBizCity(e.target.value)}
                             />
-                            <label htmlFor='floatingInput'>City</label>
+                            <label htmlFor='floatingInput'>City &#42;</label>
                         </div>
                         <div className='form-floating right-input'>
                             <input
@@ -235,7 +235,7 @@ function CreateCard({ fetchBusinesses }: CreateCardProps) {
                                 value={bizStreet}
                                 onChange={(e) => setBizStreet(e.target.value)}
                             />
-                            <label htmlFor='floatingPassword'>Street</label>
+                            <label htmlFor='floatingPassword'>Street &#42;</label>
                         </div>
                     </div>
                     <div className='d-flex'>
@@ -247,7 +247,7 @@ function CreateCard({ fetchBusinesses }: CreateCardProps) {
                                 value={bizHouseNo}
                                 onChange={(e) => setBizHouseNo(e.target.value)}
                             />
-                            <label htmlFor='floatingInput'>House Number</label>
+                            <label htmlFor='floatingInput'>House Number &#42;</label>
                         </div>
                         <div className='form-floating right-input'>
                             <input
@@ -257,7 +257,7 @@ function CreateCard({ fetchBusinesses }: CreateCardProps) {
                                 value={bizZip}
                                 onChange={(e) => setBizZip(e.target.value)}
                             />
-                            <label htmlFor='floatingPassword'>Zip Code</label>
+                            <label htmlFor='floatingPassword'>Zip Code &#42;</label>
                         </div>
                     </div>
 
