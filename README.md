@@ -4,7 +4,7 @@
 
 This is a dynamic application for advertising businesses that provides full CRUD functionality and a RESTful API. It is built using React TypeScript Template with Material-UI for the frontend, Node.js with Express for the backend, and MongoDB as the database.
 
-## Prerequisites
+## Installation
 
 Before running the application, make sure you have the following installed:
 

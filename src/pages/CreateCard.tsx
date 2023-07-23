@@ -8,9 +8,10 @@ import './CreateCard.css';
 
 export interface CreateCardProps {
     fetchBusinesses: () => void;
+    fetchUser: () => void;
 }
 
-function CreateCard({ fetchBusinesses }: CreateCardProps) {
+function CreateCard({ fetchBusinesses ,fetchUser}: CreateCardProps) {
     const navigate = useNavigate();
     const [user_id, setUser_Id] = useState('');
     const [bizTitle, setBizTitle] = useState('');
@@ -76,6 +77,7 @@ function CreateCard({ fetchBusinesses }: CreateCardProps) {
                 bizImage,
             });
             fetchBusinesses();
+            fetchUser();
             setBizTitle('');
             setbizSubTitle('');
             setBizDescription('');

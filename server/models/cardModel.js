@@ -25,7 +25,6 @@ const cardSchema = new mongoose.Schema({
     },
     bizWeb: {
         type: String,
-        required: true,
     },
     bizImage: {
         type: String,
@@ -34,8 +33,8 @@ const cardSchema = new mongoose.Schema({
         type: String,
     },
     bizState: {
+        
         type: String,
-        required: true,
     },
     bizCountry: {
         type: String,
@@ -87,10 +86,10 @@ function validateCard(card) {
             .required()
             .regex(/^0[2-9]\d{7,8}$/),
         bizEmail: Joi.string().email().lowercase().trim().required(),
-        bizWeb: Joi.string().min(2).max(255),
+        bizWeb: Joi.string().max(255).optional(),
         bizImage: Joi.string().min(11).max(1024),
         bizImageAlt: Joi.string().min(1).max(1024),
-        bizState: Joi.string().min(2).max(400),
+        bizState: Joi.string().min(2).max(400).optional(),
         bizCountry: Joi.string().min(2).max(400).required(),
         bizCity: Joi.string().min(2).max(400).required(),
         bizStreet: Joi.string().min(2).max(400).required(),
