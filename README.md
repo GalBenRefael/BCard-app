@@ -37,7 +37,7 @@ Before running the application, make sure you have the following installed:
 
 - React: A JavaScript library for building user interfaces - Using TypeScript template.
 - Material-UI: A popular React UI framework that provides pre-designed components and styling.
-- Bootstrap: A popular UI framework that provide designed compenents for styling.
+- Bootstrap: A popular UI framework that provide designed compenents and styling.
 - Node.js: A runtime environment for executing JavaScript code on the server-side.
 - Express: A minimalist web application framework for Node.js.
 - MongoDB: A document-oriented NoSQL database for storing application data.
