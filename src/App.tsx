@@ -124,7 +124,7 @@ function App() {
           />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/register" element={<Signup />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/login" element={<Login fetchUser={fetchUser} />} />
           <Route
             path="sandbox"
             element={
