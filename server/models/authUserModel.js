@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
-const jwt = require("jsonwebtoken");
-const config = require("config");
+const mongoose = require('mongoose');
+const jwt = require('jsonwebtoken');
+const config = require('config');
 
 const userSchema = new mongoose.Schema({
   firstName: {
@@ -69,9 +69,9 @@ const userSchema = new mongoose.Schema({
     default: false,
   },
   createdAt: { type: Date, default: Date.now },
-  cards: [{ type: mongoose.Schema.Types.ObjectId, ref: "Card" }],
+  cards: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Card' }],
   favorites: {
-    type: [{ type: mongoose.Schema.Types.ObjectId, ref: "Card" }],
+    type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Card' }],
     default: [],
   },
   failedAttempts: {
@@ -83,12 +83,12 @@ const userSchema = new mongoose.Schema({
 userSchema.methods.generateAuthToken = function () {
   const user = this._doc;
   delete user.password;
-  const token = jwt.sign({ ...user }, config.get("jwtKey"), {
-    expiresIn: "1d",
+  const token = jwt.sign({ ...user }, config.get('jwtKey'), {
+    expiresIn: '4h',
   });
   return token;
 };
 
-const User = mongoose.model("User", userSchema, "users");
+const User = mongoose.model('User', userSchema, 'users');
 
 module.exports = User;

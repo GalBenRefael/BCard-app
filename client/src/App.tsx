@@ -1,30 +1,30 @@
-import React, { useEffect } from "react";
-import "./App.css";
-import Header from "./components/Header";
-import { ToastContainer, toast } from "react-toastify";
-import { Route, Routes } from "react-router-dom";
-import Login from "./auth/Login/Login";
-import Footer from "./components/Footer";
-import Signup from "./auth/Signup/Signup";
-import { User } from "./interfaces/User";
-import HomePage from "./pages/Homepage/Homepage";
-import Edit from "./pages/Edit";
-import CreateCard from "./pages/CreateCard";
-import { createContext, useState } from "react";
-import AdminGuard from "./auth/AdminGuard";
-import SandBox from "./pages/SANDBOX/SandBox";
+import React, { useEffect } from 'react';
+import './App.css';
+import Header from './components/Header';
+import { ToastContainer, toast } from 'react-toastify';
+import { Route, Routes } from 'react-router-dom';
+import Login from './auth/Login/Login';
+import Footer from './components/Footer';
+import Signup from './auth/Signup/Signup';
+import { User } from './interfaces/User';
+import HomePage from './pages/Homepage/Homepage';
+import Edit from './pages/Edit';
+import CreateCard from './pages/CreateCard';
+import { createContext, useState } from 'react';
+import AdminGuard from './auth/AdminGuard';
+import SandBox from './pages/SANDBOX/SandBox';
 import {
   deleteCard,
   getCardByUser,
   getCards,
   verifyToken,
-} from "./services/ApiService";
-import BusinessPage from "./pages/BusinessPage/BusinessPage";
-import MyCards from "./pages/MyCards/MyCards";
-import FavCards from "./pages/FavCards";
-import AboutPage from "./pages/About/AboutPage";
-import EditUser from "./pages/EditUser/EditUser";
-import { CardProps } from "./interfaces/Card";
+} from './services/ApiService';
+import BusinessPage from './pages/BusinessPage/BusinessPage';
+import MyCards from './pages/MyCards/MyCards';
+import FavCards from './pages/FavCards';
+import AboutPage from './pages/About/AboutPage';
+import EditUser from './pages/EditUser/EditUser';
+import { CardProps } from './interfaces/Card';
 
 interface Context {
   user: User | undefined;
@@ -40,33 +40,47 @@ export const AppContext = createContext<Context>({
 
 function App() {
   const [user, setUser] = useState<User>();
-  const [theme, setTheme] = useState("light");
-  const [search, setSearch] = useState("");
+  const [theme, setTheme] = useState('light');
+  const [search, setSearch] = useState('');
   const [businesses, setBusinesses] = useState<Array<CardProps>>([]);
   const [filteredBusiness, setFilteredBusinesses] = useState<Array<CardProps>>(
     []
   );
 
   const toggleTheme = () => {
-    theme === "dark" ? setTheme("light") : setTheme("dark");
+    theme === 'dark' ? setTheme('light') : setTheme('dark');
   };
 
   const fetchBusinesses = () =>
-    getCards().then((json) => {
-      setBusinesses(json);
-      setFilteredBusinesses(json);
-    });
+    getCards()
+      .then((json) => {
+        setBusinesses(json);
+        setFilteredBusinesses(json);
+      })
+      .catch((error) => {
+        console.log(error);
+        if (error instanceof Error) {
+          toast.error(error.message);
+        }
+      });
 
   function fetchUser() {
     verifyToken()
       .then((user) => {
         if (user) {
-          getCardByUser(user._id).then((cards) => {
-            setUser({
-              ...user,
-              cards: cards.map(({ _id }) => _id),
+          getCardByUser(user._id)
+            .then((cards) => {
+              setUser({
+                ...user,
+                cards: cards.map(({ _id }) => _id),
+              });
+            })
+            .catch((error) => {
+              console.log(error);
+              if (error instanceof Error) {
+                toast.error(error.message);
+              }
             });
-          });
         }
       })
       .catch((err) => {
@@ -92,14 +106,21 @@ function App() {
   }
 
   async function onDelete(_id: string) {
-    const res = await deleteCard(_id);
+    try {
+      const res = await deleteCard(_id);
 
-    const updated = [...businesses].filter((card) => card._id !== _id);
+      const updated = [...businesses].filter((card) => card._id !== _id);
 
-    setBusinesses(updated);
+      setBusinesses(updated);
 
-    toast.success(`Business Card has been deleted successfully!`);
-    fetchBusinesses();
+      toast.success(`Business Card has been deleted successfully!`);
+      fetchBusinesses();
+    } catch (error) {
+      console.log(error);
+      if (error instanceof Error) {
+        toast.error(error.message);
+      }
+    }
   }
 
   return (

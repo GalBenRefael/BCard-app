@@ -1,69 +1,69 @@
-import { useState } from "react";
-import FormLayout from "../../components/FormLayout";
-import Title from "../../components/Title";
-import { register } from "../../services/ApiService";
-import "./Signup.css";
-import { useNavigate, Link, NavLink } from "react-router-dom";
-import { toast } from "react-toastify";
+import { useState } from 'react';
+import FormLayout from '../../components/FormLayout';
+import Title from '../../components/Title';
+import { register } from '../../services/ApiService';
+import './Signup.css';
+import { useNavigate, Link, NavLink } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const passwordRegex = new RegExp(
-  "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$"
+  '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$'
 );
 
 function Signup() {
-  const [firstName, setFirstName] = useState("");
-  const [firstNameError, setFirstNameError] = useState("");
-  const [middleName, setMiddleName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [lastNameError, setLastNameError] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [phoneError, setPhoneError] = useState("");
-  const [password, setPassword] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
-  const [imageAlt, setImageAlt] = useState("");
-  const [state, setState] = useState("");
-  const [country, setCountry] = useState("");
-  const [city, setCity] = useState("");
-  const [street, setStreet] = useState("");
-  const [houseNumber, setHouseNumber] = useState("");
-  const [zip, setZip] = useState("");
+  const [firstName, setFirstName] = useState('');
+  const [firstNameError, setFirstNameError] = useState('');
+  const [middleName, setMiddleName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [lastNameError, setLastNameError] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [phoneError, setPhoneError] = useState('');
+  const [password, setPassword] = useState('');
+  const [imageUrl, setImageUrl] = useState('');
+  const [imageAlt, setImageAlt] = useState('');
+  const [state, setState] = useState('');
+  const [country, setCountry] = useState('');
+  const [city, setCity] = useState('');
+  const [street, setStreet] = useState('');
+  const [houseNumber, setHouseNumber] = useState('');
+  const [zip, setZip] = useState('');
   const [isBiz, setIsbiz] = useState(false);
   const navigate = useNavigate();
 
   function validate(): boolean {
     if (!firstName || firstName.length < 2) {
-      toast.error("First name is required.");
+      toast.error('First name is required.');
       return false;
     }
     if (!lastName || lastName.length < 2) {
-      toast.error("Last name is required.");
+      toast.error('Last name is required.');
       return false;
     }
     if (!country || country.length < 2) {
-      toast.error("Country is required.");
+      toast.error('Country is required.');
       return false;
     }
     if (!city || city.length < 2) {
-      toast.error("City is required.");
+      toast.error('City is required.');
       return false;
     }
     if (!houseNumber) {
-      toast.error("House number is required.");
+      toast.error('House number is required.');
       return false;
     }
     if (!email) {
-      toast.error("email is required.");
+      toast.error('email is required.');
       return false;
     }
     if (!phone || phone.length < 9) {
-      toast.error("Phone is required.");
+      toast.error('Phone is required.');
       return false;
     }
 
     if (!passwordRegex.test(password)) {
       toast.error(
-        "Password must be minimum eight characters, at least one uppercase letter, one lowercase letter, one number, and one special character"
+        'Password must be minimum eight characters, at least one uppercase letter, one lowercase letter, one number, and one special character'
       );
       return false;
     }
@@ -72,20 +72,20 @@ function Signup() {
   }
 
   function clearFields() {
-    setFirstName("");
-    setLastName("");
-    setMiddleName("");
-    setState("");
-    setCountry("");
-    setEmail("");
-    setPhone("");
-    setPassword("");
-    setImageUrl("");
-    setImageAlt("");
-    setCity("");
-    setStreet("");
-    setHouseNumber("");
-    setZip("");
+    setFirstName('');
+    setLastName('');
+    setMiddleName('');
+    setState('');
+    setCountry('');
+    setEmail('');
+    setPhone('');
+    setPassword('');
+    setImageUrl('');
+    setImageAlt('');
+    setCity('');
+    setStreet('');
+    setHouseNumber('');
+    setZip('');
   }
 
   function handleClick() {
@@ -112,11 +112,14 @@ function Signup() {
       cards: [],
     })
       .then((user) => {
-        navigate("/login");
-        toast.success("User registered Successfully");
+        navigate('/login');
+        toast.success('User registered Successfully');
       })
-      .catch((err) => {
-        toast.error("Registeration failed: " + err.message);
+      .catch((error) => {
+        console.log(error);
+        if (error instanceof Error) {
+          toast.error('Registeration failed: ' + error.message);
+        }
       });
   }
 
@@ -146,7 +149,7 @@ function Signup() {
               {firstNameError && (
                 <div
                   className="invalid-feedback"
-                  style={{ display: "initial" }}
+                  style={{ display: 'initial' }}
                 >
                   {firstNameError}
                 </div>
@@ -183,7 +186,7 @@ function Signup() {
               {lastNameError && (
                 <div
                   className="invalid-feedback"
-                  style={{ display: "initial" }}
+                  style={{ display: 'initial' }}
                 >
                   {lastNameError}
                 </div>
@@ -207,7 +210,7 @@ function Signup() {
               {phoneError && (
                 <div
                   className="invalid-feedback"
-                  style={{ display: "initial" }}
+                  style={{ display: 'initial' }}
                 >
                   {phoneError}
                 </div>
@@ -345,7 +348,7 @@ function Signup() {
           </div>
           <div className="d-flex">
             <div>
-              <Link to={"/"}>
+              <Link to={'/'}>
                 <button type="button" className="btn text-danger" id="cancel">
                   Cancel
                 </button>

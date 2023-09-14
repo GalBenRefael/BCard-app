@@ -1,34 +1,34 @@
-import { useContext, useState } from "react";
-import FormLayout from "../../components/FormLayout";
-import Title from "../../components/Title";
-import { toast } from "react-toastify";
-import "./Login.css";
-import { useNavigate, Link } from "react-router-dom";
-import User from "../Signup/Signup";
-import { NavLink } from "react-router-dom";
+import { useContext, useState } from 'react';
+import FormLayout from '../../components/FormLayout';
+import Title from '../../components/Title';
+import { toast } from 'react-toastify';
+import './Login.css';
+import { useNavigate, Link } from 'react-router-dom';
+import User from '../Signup/Signup';
+import { NavLink } from 'react-router-dom';
 
-import { setToken } from "../TokenManager";
-import { login } from "../../services/ApiService";
-import { AppContext } from "../../App";
+import { setToken } from '../TokenManager';
+import { login } from '../../services/ApiService';
+import { AppContext } from '../../App';
 
 interface LoginProps {
   fetchUser: () => void;
 }
 
 function Login({ fetchUser }: LoginProps) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const context = useContext(AppContext);
   const navigate = useNavigate();
 
   function validate(): boolean {
-    if (!email.includes("@")) {
-      toast.error("email is invalid.");
+    if (!email.includes('@')) {
+      toast.error('email is invalid.');
       return false;
     }
 
     if (!password || password.length < 8) {
-      toast.error("Password must contain at least 8 characters");
+      toast.error('Password must contain at least 8 characters');
       return false;
     }
 
@@ -36,8 +36,8 @@ function Login({ fetchUser }: LoginProps) {
   }
 
   function clearFields() {
-    setEmail("");
-    setPassword("");
+    setEmail('');
+    setPassword('');
   }
 
   function handleClick() {
@@ -55,11 +55,14 @@ function Login({ fetchUser }: LoginProps) {
           context.setUser(user);
         }
         fetchUser();
-        navigate("/");
+        navigate('/');
         toast.success(`Welcome ${user.firstName}`);
       })
-      .catch((err) => {
-        toast.error(err.message);
+      .catch((error) => {
+        console.log(error);
+        if (error instanceof Error) {
+          toast.error(error.message);
+        }
       });
   }
 
@@ -92,7 +95,7 @@ function Login({ fetchUser }: LoginProps) {
 
           <div className="d-flex">
             <div>
-              <Link to={"/"}>
+              <Link to={'/'}>
                 <button type="button" className="btn text-danger" id="cancel2">
                   Cancel
                 </button>

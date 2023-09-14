@@ -2,16 +2,17 @@ const express = require('express');
 const _ = require('lodash');
 const cards = require('../controllers/cards');
 
-const auth = require('../middleware/auth');
+const { requireAuth } = require('../middleware/auth');
+
 const router = express.Router();
 
-router.post('/', auth, cards.createCard);
-router.get('/my-cards', auth, cards.myCards);
+router.post('/', requireAuth, cards.createCard);
+router.get('/my-cards', requireAuth, cards.myCards);
 router.get('/:id', cards.getCard);
-router.patch('/:id', auth, cards.editCard);
-router.delete('/:id', auth, cards.deleteCard);
+router.patch('/:id', requireAuth, cards.editCard);
+router.delete('/:id', requireAuth, cards.deleteCard);
 router.get('/', cards.getAllCards);
-router.get('/favs', auth, cards.getUserFavoriteCards);
-router.post('/:id', auth, cards.setFavorite);
+router.get('/favs', requireAuth, cards.getUserFavoriteCards);
+router.post('/:id', requireAuth, cards.setFavorite);
 
 module.exports = router;

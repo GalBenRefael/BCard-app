@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import Title from "../../components/Title";
-import FormLayout from "../../components/FormLayout";
-import { editUser, getUserById } from "../../services/ApiService";
-import { toast } from "react-toastify";
-import { User } from "../../interfaces/User";
-import "./EditUser.css";
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import Title from '../../components/Title';
+import FormLayout from '../../components/FormLayout';
+import { editUser, getUserById } from '../../services/ApiService';
+import { toast } from 'react-toastify';
+import { User } from '../../interfaces/User';
+import './EditUser.css';
 
 interface EditUserProps {
   fetchUser: () => void;
@@ -14,39 +14,46 @@ interface EditUserProps {
 const EditUser = ({ fetchUser }: EditUserProps) => {
   const navigate = useNavigate();
   const { id } = useParams();
-  const [firstName, setFirstName] = useState("");
-  const [middleName, setMiddleName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
-  const [imageAlt, setImageAlt] = useState("");
-  const [state, setState] = useState("");
-  const [country, setCountry] = useState("");
-  const [city, setCity] = useState("");
-  const [street, setStreet] = useState("");
-  const [houseNumber, setHouseNumber] = useState("");
-  const [zip, setZip] = useState("");
+  const [firstName, setFirstName] = useState('');
+  const [middleName, setMiddleName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [imageUrl, setImageUrl] = useState('');
+  const [imageAlt, setImageAlt] = useState('');
+  const [state, setState] = useState('');
+  const [country, setCountry] = useState('');
+  const [city, setCity] = useState('');
+  const [street, setStreet] = useState('');
+  const [houseNumber, setHouseNumber] = useState('');
+  const [zip, setZip] = useState('');
   const [isBiz, setIsbiz] = useState(false);
   const [user, setUser] = useState<User>();
 
   useEffect(() => {
     if (!id) return;
-    getUserById(id).then((user) => {
-      setUser(user);
-      setFirstName(user.firstName as string);
-      setMiddleName(user.middleName as string);
-      setLastName(user.lastName as string);
-      setPhone(user.phone as string);
-      setImageUrl(user.imageUrl as string);
-      setImageAlt(user.imageAlt as string);
-      setState(user.state as string);
-      setCountry(user.country as string);
-      setCity(user.city as string);
-      setStreet(user.street as string);
-      setHouseNumber(user.houseNumber as string);
-      setZip(user.zip as string);
-      setIsbiz(!!user.isBiz);
-    });
+    getUserById(id)
+      .then((user) => {
+        setUser(user);
+        setFirstName(user.firstName as string);
+        setMiddleName(user.middleName as string);
+        setLastName(user.lastName as string);
+        setPhone(user.phone as string);
+        setImageUrl(user.imageUrl as string);
+        setImageAlt(user.imageAlt as string);
+        setState(user.state as string);
+        setCountry(user.country as string);
+        setCity(user.city as string);
+        setStreet(user.street as string);
+        setHouseNumber(user.houseNumber as string);
+        setZip(user.zip as string);
+        setIsbiz(!!user.isBiz);
+      })
+      .catch((error) => {
+        console.log(error);
+        if (error instanceof Error) {
+          toast.error(error.message);
+        }
+      });
   }, [id]);
 
   const handleSubmit = (e: any) => {
@@ -72,12 +79,15 @@ const EditUser = ({ fetchUser }: EditUserProps) => {
       favorites: user!.favorites,
     })
       .then((json) => {
-        navigate("/");
-        toast.success("User edited successfully.");
+        navigate('/');
+        toast.success('User edited successfully.');
         fetchUser();
       })
-      .catch((err) => {
-        toast.error(err.message);
+      .catch((error) => {
+        console.log(error);
+        if (error instanceof Error) {
+          toast.error(error.message);
+        }
       });
   };
 

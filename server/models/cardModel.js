@@ -1,6 +1,6 @@
-const Joi = require("joi");
-const mongoose = require("mongoose");
-const _ = require("lodash");
+const Joi = require('joi');
+const mongoose = require('mongoose');
+const _ = require('lodash');
 
 const cardSchema = new mongoose.Schema({
   bizTitle: {
@@ -55,10 +55,14 @@ const cardSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  bizCategory: {
+    type: String,
+    required: true,
+  },
   favorites: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      ref: 'User',
     },
   ],
 
@@ -69,10 +73,10 @@ const cardSchema = new mongoose.Schema({
     maxlength: 99999999999,
     unique: true,
   },
-  user_id: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+  user_id: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
 });
 
-const Card = mongoose.model("Card", cardSchema);
+const Card = mongoose.model('Card', cardSchema);
 
 function validateCard(card) {
   const schema = Joi.object({
@@ -92,6 +96,7 @@ function validateCard(card) {
     bizCountry: Joi.string().min(2).max(400).required(),
     bizCity: Joi.string().min(2).max(400).required(),
     bizStreet: Joi.string().min(2).max(400).required(),
+    bizCategory: Joi.string().min(2).max(400).required(),
     bizHouseNo: Joi.string().min(2).max(400),
     bizZip: Joi.string().min(2).max(19).required(),
     user_id: Joi.string().optional(),
