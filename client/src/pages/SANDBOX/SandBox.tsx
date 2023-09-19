@@ -67,7 +67,6 @@ const Sandbox = (props: Props) => {
                 <td>{user.email}</td>
                 <td className="phone">{user.phone}</td>
                 <td>{JSON.stringify(user.isBiz)}</td>
-                {/* <td>{user.blocked}</td> */}
                 <td>
                   {!user.isAdmin && (
                     <Link to={`/edituser/${user._id}`}>

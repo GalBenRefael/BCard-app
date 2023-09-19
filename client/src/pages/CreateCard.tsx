@@ -109,7 +109,7 @@ function CreateCard({ fetchBusinesses, fetchUser }: CreateCardProps) {
 
   return (
     <div id="createCard">
-      <Title mainText="Create Card" />
+      <Title mainText="Create Business Card" />
       <FormLayout>
         <form>
           <div className="d-flex">

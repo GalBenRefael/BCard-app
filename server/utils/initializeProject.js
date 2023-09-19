@@ -31,7 +31,7 @@ const businessCards = [
       'https://cdn.pixabay.com/photo/2013/07/21/13/00/rose-165819_1280.jpg',
     bizImageAlt: 'image',
     bizEmail: 'biz2@mail.com',
-    bizWeb: 'www.biz2.com',
+    bizWeb: 'www.f4u.com',
     bizState: 'Israel',
     bizCountry: 'Israel',
     bizCity: 'Hadera',
@@ -52,7 +52,7 @@ const businessCards = [
       'https://cdn.pixabay.com/photo/2016/12/19/08/39/mobile-phone-1917737_640.jpg',
     bizImageAlt: 'image',
     bizEmail: 'biz3@mail.com',
-    bizWeb: 'www.biz3.com',
+    bizWeb: 'www.the-lab.com',
     bizState: 'Israel',
     bizCountry: 'Israel',
     bizCity: 'Tel Aviv',
@@ -73,7 +73,7 @@ const businessCards = [
       'https://cdn.pixabay.com/photo/2017/12/10/14/47/pizza-3010062_640.jpg',
     bizImageAlt: 'image',
     bizEmail: 'biz5@mail.com',
-    bizWeb: 'www.biz5.com',
+    bizWeb: 'www.the-italian.com',
     bizState: 'Israel',
     bizCountry: 'Israel',
     bizCity: 'Haifa',
@@ -94,7 +94,7 @@ const businessCards = [
       'https://cdn.pixabay.com/photo/2016/03/05/23/01/prawn-1239427_640.jpg',
     bizImageAlt: 'image',
     bizEmail: 'biz6@mail.com',
-    bizWeb: 'www.biz6.com',
+    bizWeb: 'www.panda.com',
     bizState: 'Israel',
     bizCountry: 'Israel',
     bizCity: 'Tel Aviv',
@@ -115,7 +115,7 @@ const businessCards = [
       'https://cdn.pixabay.com/photo/2017/08/03/21/37/construction-2578410_640.jpg',
     bizImageAlt: 'image',
     bizEmail: 'biz4@mail.com',
-    bizWeb: 'www.biz4.com',
+    bizWeb: 'www.fidelity.com',
     bizState: 'Israel',
     bizCountry: 'Israel',
     bizCity: 'Natanya',
@@ -129,7 +129,7 @@ const businessCards = [
 ];
 
 const initializProject = async () => {
-  //   await Card.deleteMany({});
+  // await Card.deleteMany({});
   const allcards = await Card.find({});
   if (allcards.length <= 0) {
     Card.create(businessCards);

@@ -31,7 +31,7 @@ function HomePage({ onDelete, filteredBusiness }: HomepageProps) {
   return (
     <>
       <Title
-        mainText="Cards"
+        mainText="Business Cards"
         subText="Here you can find Business Cards form all categories"
       />
       <div className="d-flex main">
