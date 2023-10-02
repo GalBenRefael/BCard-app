@@ -10,9 +10,14 @@ import { CategorySelect } from '../../components/CategorySelect';
 interface HomepageProps {
   onDelete: (_id: string) => void;
   filteredBusiness: CardProps[];
+  fetchBusinesses: () => Promise<void>;
 }
 
-function HomePage({ onDelete, filteredBusiness }: HomepageProps) {
+function HomePage({
+  onDelete,
+  filteredBusiness,
+  fetchBusinesses,
+}: HomepageProps) {
   console.log(filteredBusiness);
   const [displayMode, setDisplayMode] = useState('grid');
   const [selectedCategory, setSelectedCategory] = useState('');
@@ -73,6 +78,7 @@ function HomePage({ onDelete, filteredBusiness }: HomepageProps) {
             key={cardItem._id}
             cardItem={cardItem}
             onDelete={onDelete}
+            fetchBusinesses={fetchBusinesses}
           />
         ))}
       </div>

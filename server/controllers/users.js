@@ -1,12 +1,17 @@
-const express = require('express');
+const fs = require('fs');
 const bcrypt = require('bcrypt');
+const config = require('config');
 const joi = require('joi');
 const { Card } = require('../models/cardModel');
 const User = require('../models/authUserModel');
 const AuthUserModelJOI = require('../models/authUserModelJoi');
 const _ = require('lodash');
+const path = require('path');
+const { sendEmail } = require('../services/send-email');
 
 const ONE_DAY = 1000 * 60 * 60 * 24;
+
+const codes = {};
 
 module.exports = {
   // REGISTER
@@ -22,15 +27,20 @@ module.exports = {
   },
   register: async (request, response) => {
     try {
-      const userModel = new AuthUserModelJOI(request.body);
+      console.log(request.file);
+      const userData = { ...request.body, isBiz: !!request.body.isBiz };
+      const userModel = new AuthUserModelJOI(userData);
       const errors = userModel.validateRegistration();
       if (errors) return response.status(400).send(errors);
 
-      let user = await User.findOne({ email: request.body.email });
-      if (user) return response.status(400).send('User already registered.');
+      let user = await User.findOne({ email: userData.email });
+      if (user)
+        return response
+          .status(400)
+          .send({ message: 'User already registered.' });
 
       user = new User(
-        _.pick(request.body, [
+        _.pick(userData, [
           'firstName',
           'lastName',
           'middleName',
@@ -53,7 +63,18 @@ module.exports = {
       const salt = await bcrypt.genSalt(10);
       user.password = await bcrypt.hash(user.password, salt);
 
+      const userId = user._id;
+      const ext = request.file.originalname.split('.').at(-1);
+
+      const fileName = userId + '.' + ext;
+      user.imageUrl = fileName;
+
       await user.save();
+
+      fs.renameSync(
+        request.file.path,
+        path.join(config.get('uploadsFolder'), fileName)
+      );
 
       response.status(200).send(_.pick(user, ['_id', 'firstName', 'email']));
     } catch (err) {
@@ -69,7 +90,7 @@ module.exports = {
       );
       response.json(user);
     } catch (error) {
-      res.status(500).send(error.message);
+      response.status(500).send(error.message);
     }
   },
 
@@ -118,6 +139,44 @@ module.exports = {
     } catch (err) {
       response.status(500).json({ message: err.message });
     }
+  },
+
+  startPasswordReset: async (request, response) => {
+    const { email } = request.body;
+    if (!email) {
+      return response.status(400).json({ message: 'email is missing' });
+    }
+    const user = await User.findOne({ email });
+    if (!user) {
+      return response.status(400).json({ message: 'email not found' });
+    }
+
+    // 0.3425235245234
+    const code = Math.random().toString().slice(-5);
+    codes[code] = email;
+    sendEmail({
+      email,
+      subject: 'Password reset',
+      text: 'You password reset code is: ' + code,
+    });
+    response.send({ message: 'email sent' });
+  },
+
+  resetPassword: async (request, response) => {
+    const { code, newPassword } = request.body;
+    const email = codes[code];
+    if (!email) {
+      res.json({ message: 'Incorrect code' });
+    }
+    const user = await User.findOne({ email });
+    if (!user) {
+      return response.status(400).json({ message: 'email not found' });
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(newPassword, salt);
+    await user.save();
+    response.json({ message: 'Password was reset successfully' });
   },
 
   favorite: async (req, res) => {
@@ -185,8 +244,6 @@ module.exports = {
         middleName: joi.string().optional().allow(''),
         lastName: joi.string().optional().min(2).max(100),
         phone: joi.string().optional().min(6).max(250),
-        imageUrl: joi.string().optional().allow(''),
-        imageAlt: joi.string().optional().allow(''),
         state: joi.string().optional().allow(''),
         country: joi.string().optional(),
         city: joi.string().optional(),
@@ -194,11 +251,14 @@ module.exports = {
         houseNumber: joi.string().optional(),
         zip: joi.string().optional().allow(''),
         isBiz: joi.boolean(),
-        cards: joi.array().optional(),
-        favorites: joi.array().optional(),
+        isAdmin: joi.boolean(),
       });
 
-      const { error, value } = scheme.validate(req.body);
+      const { error, value } = scheme.validate({
+        ...req.body,
+        isBiz: !!req.body.isBiz,
+        isAdmin: !!req.body.isAdmin,
+      });
 
       if (error) {
         console.log(error.details[0].message);
@@ -215,6 +275,19 @@ module.exports = {
         },
         value
       );
+      const userId = user._id;
+      if (req.file) {
+        const ext = req.file.originalname.split('.').at(-1);
+
+        const fileName = userId + '.' + ext;
+        user.imageUrl = fileName;
+        fs.renameSync(
+          req.file.path,
+          path.join(config.get('uploadsFolder'), fileName)
+        );
+      }
+
+      await user.save();
 
       if (!user) return res.status(404).send('Given ID was not found.');
 

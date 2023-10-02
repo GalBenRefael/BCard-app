@@ -28,21 +28,22 @@ function Edit({ fetchBusinesses }: { fetchBusinesses: () => void }) {
   useEffect(() => {
     if (!id) return;
 
-    getCardById(id).then((json) => {
-      setBizTitle(json.bizTitle);
-      setBizSubTitle(json.bizSubTitle);
-      setBizDescription(json.bizDescription);
-      setBizImageAlt(json.bizImageAlt);
-      setBizPhone(json.bizPhone);
-      setBizEmail(json.bizEmail);
-      setBizState(json.bizState);
-      setBizCountry(json.bizCountry);
-      setBizCity(json.bizCity);
-      setBizStreet(json.bizStreet);
-      setBizHouseNo(json.bizHouseNo);
-      setBizWeb(json.bizWeb);
-      setBizImage(json.bizImage);
-      setBizZip(json.bizZip);
+    getCardById(id).then((business) => {
+      setBizTitle(business.bizTitle);
+      setBizSubTitle(business.bizSubTitle);
+      setBizDescription(business.bizDescription);
+      setBizImageAlt(business.bizImageAlt);
+      setBizPhone(business.bizPhone);
+      setBizEmail(business.bizEmail);
+      setBizState(business.bizState);
+      setBizCountry(business.bizCountry);
+      setBizCity(business.bizCity);
+      setBizStreet(business.bizStreet);
+      setBizHouseNo(business.bizHouseNo);
+      setBizWeb(business.bizWeb);
+      setBizImage(business.bizImage);
+      setBizZip(business.bizZip);
+      setBizCategory(business.bizCategory);
     });
   }, [id]);
 

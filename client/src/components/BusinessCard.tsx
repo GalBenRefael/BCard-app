@@ -8,9 +8,11 @@ import { toast } from 'react-toastify';
 export function BusinessCard({
   cardItem,
   onDelete,
+  fetchBusinesses,
 }: {
   cardItem: CardProps;
   onDelete: (_id: string) => void;
+  fetchBusinesses: () => Promise<void>;
 }) {
   const context = useContext(AppContext);
   const location = useLocation();
@@ -26,6 +28,7 @@ export function BusinessCard({
       if (result.success) {
         toast.success(`${result.type} favorites`);
         context?.fetchUser();
+        fetchBusinesses();
       }
     } catch (error) {
       console.log(error);

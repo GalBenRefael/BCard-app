@@ -5,10 +5,13 @@ import Title from '../../components/Title';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import './SandBox.css';
+import { CardWithLikes } from '../../interfaces/Card';
 
-type Props = {};
+interface SandboxProps {
+  businesses: CardWithLikes[];
+}
 
-const Sandbox = (props: Props) => {
+const Sandbox = ({ businesses }: SandboxProps) => {
   const [users, setUsers] = useState<Array<User>>([]);
 
   useEffect(() => {
@@ -69,7 +72,7 @@ const Sandbox = (props: Props) => {
                 <td>{JSON.stringify(user.isBiz)}</td>
                 <td>
                   {!user.isAdmin && (
-                    <Link to={`/edituser/${user._id}`}>
+                    <Link to={`/sandbox/edituser/${user._id}`}>
                       <button className="btn bt-light">
                         <i className="bi bi-pen" />
                       </button>
@@ -85,6 +88,24 @@ const Sandbox = (props: Props) => {
                     </button>
                   )}
                 </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <br />
+        <br />
+        <table className="table table-hover text-center w-50 mx-auto">
+          <thead>
+            <tr>
+              <th className="userId">Business name</th>
+              <th className="userId">Likes</th>
+            </tr>
+          </thead>
+          <tbody>
+            {businesses.map((business) => (
+              <tr key={business._id}>
+                <td className="userId">{business.bizTitle}</td>
+                <td className="userId">{business.likes}</td>
               </tr>
             ))}
           </tbody>

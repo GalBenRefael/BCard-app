@@ -1,5 +1,5 @@
-const joi = require("joi");
-const { keys } = require("lodash");
+const joi = require('joi');
+const { keys } = require('lodash');
 
 class AuthUserModelJOI {
   constructor(object) {
@@ -24,8 +24,6 @@ class AuthUserModelJOI {
     email: joi.string().required().email().min(6).max(50),
     phone: joi.number().required(),
     password: joi.string().required().min(8).max(50),
-    imageUrl: joi.string().min(2).max(20),
-    imageAlt: joi.string().min(2).max(20),
     country: joi.string().min(2).max(30),
     city: joi.string().min(2).max(30),
     street: joi.string().min(2).max(30),

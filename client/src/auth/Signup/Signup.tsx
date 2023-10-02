@@ -3,7 +3,7 @@ import FormLayout from '../../components/FormLayout';
 import Title from '../../components/Title';
 import { register } from '../../services/ApiService';
 import './Signup.css';
-import { useNavigate, Link, NavLink } from 'react-router-dom';
+import { useNavigate, Link, NavLink, Form } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 const passwordRegex = new RegExp(
@@ -20,8 +20,7 @@ function Signup() {
   const [phone, setPhone] = useState('');
   const [phoneError, setPhoneError] = useState('');
   const [password, setPassword] = useState('');
-  const [imageUrl, setImageUrl] = useState('');
-  const [imageAlt, setImageAlt] = useState('');
+  const [image, setImage] = useState<null | File>(null);
   const [state, setState] = useState('');
   const [country, setCountry] = useState('');
   const [city, setCity] = useState('');
@@ -80,8 +79,7 @@ function Signup() {
     setEmail('');
     setPhone('');
     setPassword('');
-    setImageUrl('');
-    setImageAlt('');
+    setImage(null);
     setCity('');
     setStreet('');
     setHouseNumber('');
@@ -93,24 +91,25 @@ function Signup() {
       return;
     }
 
-    register({
-      firstName,
-      lastName,
-      middleName,
-      phone,
-      email,
-      password,
-      imageUrl,
-      imageAlt,
-      state,
-      country,
-      city,
-      street,
-      houseNumber,
-      zip,
-      isBiz,
-      cards: [],
-    })
+    const formData = new FormData();
+    formData.append('firstName', firstName);
+    formData.append('lastName', lastName);
+    formData.append('middleName', middleName);
+    formData.append('phone', phone);
+    formData.append('email', email);
+    formData.append('password', password);
+    if (image) {
+      formData.append('image', image);
+    }
+    formData.append('state', state);
+    formData.append('country', country);
+    formData.append('city', city);
+    formData.append('street', street);
+    formData.append('houseNumber', houseNumber);
+    formData.append('zip', zip);
+    formData.append('isBiz', isBiz ? '1' : '');
+
+    register(formData)
       .then((user) => {
         navigate('/login');
         toast.success('User registered Successfully');
@@ -241,30 +240,7 @@ function Signup() {
               <label htmlFor="floatingPassword">Password &#42;</label>
             </div>
           </div>
-          <div className="d-flex">
-            <div className="form-floating left-input">
-              <input
-                type="text"
-                className="form-control"
-                id="floatingInput"
-                placeholder="Image Url"
-                value={imageUrl}
-                onChange={(e) => setImageUrl(e.target.value)}
-              />
-              <label htmlFor="floatingInput">Image Url</label>
-            </div>
-            <div className="form-floating right-input">
-              <input
-                type="text"
-                className="form-control"
-                id="floatingPassword"
-                placeholder="Image alt"
-                value={imageAlt}
-                onChange={(e) => setImageAlt(e.target.value)}
-              />
-              <label htmlFor="floatingPassword">Image alt</label>
-            </div>
-          </div>
+
           <div className="d-flex">
             <div className="form-floating left-input">
               <input
@@ -346,6 +322,20 @@ function Signup() {
             ></input>
             <label className="form-check-label mb-2">Sign up as Business</label>
           </div>
+          <br />
+          <label className="form-check-label mb-2">Upload profile image:</label>
+          <div className="d-flex">
+            <input
+              type="file"
+              className="form-control"
+              onChange={(e) => {
+                if (e.target.files) {
+                  setImage(e.target.files[0]);
+                }
+              }}
+            />
+          </div>
+          <br />
           <div className="d-flex">
             <div>
               <Link to={'/'}>

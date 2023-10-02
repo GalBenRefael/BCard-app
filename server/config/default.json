@@ -1,3 +1,4 @@
 {
-  "jwtKey": "WhyS0s3rious"
+  "jwtKey": "WhyS0s3rious",
+  "uploadsFolder": "uploads/"
 }

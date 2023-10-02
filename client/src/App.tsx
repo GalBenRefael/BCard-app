@@ -24,7 +24,8 @@ import MyCards from './pages/MyCards/MyCards';
 import FavCards from './pages/FavCards';
 import AboutPage from './pages/About/AboutPage';
 import EditUser from './pages/EditUser/EditUser';
-import { CardProps } from './interfaces/Card';
+import { CardProps, CardWithLikes } from './interfaces/Card';
+import { ResetPassword } from './auth/ResetPassword/ResetPassword';
 
 interface Context {
   user: User | undefined;
@@ -42,7 +43,7 @@ function App() {
   const [user, setUser] = useState<User>();
   const [theme, setTheme] = useState('light');
   const [search, setSearch] = useState('');
-  const [businesses, setBusinesses] = useState<Array<CardProps>>([]);
+  const [businesses, setBusinesses] = useState<CardWithLikes[]>([]);
   const [filteredBusiness, setFilteredBusinesses] = useState<Array<CardProps>>(
     []
   );
@@ -140,17 +141,19 @@ function App() {
               <HomePage
                 onDelete={onDelete}
                 filteredBusiness={filteredBusiness}
+                fetchBusinesses={fetchBusinesses}
               />
             }
           />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/register" element={<Signup />} />
           <Route path="/login" element={<Login fetchUser={fetchUser} />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
           <Route
             path="sandbox"
             element={
               <AdminGuard>
-                <SandBox />
+                <SandBox businesses={businesses} />
               </AdminGuard>
             }
           />
@@ -170,16 +173,32 @@ function App() {
           />
           <Route
             path="/mycards"
-            element={<MyCards businesses={businesses} onDelete={onDelete} />}
+            element={
+              <MyCards
+                businesses={businesses}
+                onDelete={onDelete}
+                fetchBusinesses={fetchBusinesses}
+              />
+            }
           />
           <Route
             path="/favcards"
-            element={<FavCards businesses={businesses} />}
+            element={
+              <FavCards
+                businesses={businesses}
+                fetchBusinesses={fetchBusinesses}
+                onDelete={onDelete}
+              />
+            }
           />
           <Route path="/about" element={<AboutPage />} />
           <Route
-            path="/edituser/:id"
-            element={<EditUser fetchUser={fetchUser} />}
+            path="/sandbox/edituser/:id"
+            element={<EditUser fetchUser={fetchUser} loggedInUser={user} />}
+          />
+          <Route
+            path="/profile/edit/:id"
+            element={<EditUser fetchUser={fetchUser} loggedInUser={user} />}
           />
         </Routes>
         <Footer />

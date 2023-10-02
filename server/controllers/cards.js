@@ -105,7 +105,27 @@ module.exports = {
   getAllCards: async (req, res) => {
     try {
       const cards = await Card.find();
-      res.send(cards);
+      const users = await User.find();
+
+      const likesPerId = {};
+
+      for (const user of users) {
+        for (const favorite of user.favorites) {
+          if (likesPerId[favorite]) {
+            likesPerId[favorite] += 1;
+          } else {
+            likesPerId[favorite] = 1;
+          }
+        }
+      }
+
+      const cardsWithLikesCount = cards.map((card) => {
+        return { ...card.toObject(), likes: likesPerId[card._id] || 0 };
+      });
+
+      console.log(cardsWithLikesCount);
+
+      res.send(cardsWithLikesCount);
     } catch (error) {
       console.error(error);
       res.status(500).send('Internal Server Error');

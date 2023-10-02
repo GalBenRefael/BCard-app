@@ -18,3 +18,7 @@ export interface CardProps {
   bizNumber?: string;
   user_id?: string;
 }
+
+export interface CardWithLikes extends CardProps {
+  likes: number;
+}

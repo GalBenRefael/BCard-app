@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import Title from '../../components/Title';
 import FormLayout from '../../components/FormLayout';
 import { editUser, getUserById } from '../../services/ApiService';
@@ -9,14 +9,16 @@ import './EditUser.css';
 
 interface EditUserProps {
   fetchUser: () => void;
+  loggedInUser: User | undefined;
 }
 
-const EditUser = ({ fetchUser }: EditUserProps) => {
+const EditUser = ({ fetchUser, loggedInUser }: EditUserProps) => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [firstName, setFirstName] = useState('');
   const [middleName, setMiddleName] = useState('');
   const [lastName, setLastName] = useState('');
+  const [image, setImage] = useState<null | File>(null);
   const [phone, setPhone] = useState('');
   const [imageUrl, setImageUrl] = useState('');
   const [imageAlt, setImageAlt] = useState('');
@@ -27,12 +29,15 @@ const EditUser = ({ fetchUser }: EditUserProps) => {
   const [houseNumber, setHouseNumber] = useState('');
   const [zip, setZip] = useState('');
   const [isBiz, setIsbiz] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [user, setUser] = useState<User>();
+  const location = useLocation();
 
   useEffect(() => {
     if (!id) return;
     getUserById(id)
       .then((user) => {
+        console.log(user);
         setUser(user);
         setFirstName(user.firstName as string);
         setMiddleName(user.middleName as string);
@@ -47,6 +52,7 @@ const EditUser = ({ fetchUser }: EditUserProps) => {
         setHouseNumber(user.houseNumber as string);
         setZip(user.zip as string);
         setIsbiz(!!user.isBiz);
+        setIsAdmin(!!user.isAdmin);
       })
       .catch((error) => {
         console.log(error);
@@ -60,26 +66,33 @@ const EditUser = ({ fetchUser }: EditUserProps) => {
     e.preventDefault();
     if (!id) return;
 
-    editUser({
-      _id: id,
-      firstName,
-      middleName,
-      lastName,
-      phone,
-      imageUrl,
-      imageAlt,
-      state,
-      country,
-      city,
-      street,
-      houseNumber,
-      zip,
-      isBiz,
-      cards: user!.cards,
-      favorites: user!.favorites,
-    })
+    const formData = new FormData();
+    formData.append('_id', id);
+    formData.append('firstName', firstName);
+    formData.append('lastName', lastName);
+    formData.append('middleName', middleName);
+    formData.append('phone', phone);
+
+    if (image) {
+      formData.append('image', image);
+    }
+
+    formData.append('state', state);
+    formData.append('country', country);
+    formData.append('city', city);
+    formData.append('street', street);
+    formData.append('houseNumber', houseNumber);
+    formData.append('zip', zip);
+    formData.append('isBiz', isBiz ? '1' : '');
+    formData.append('isAdmin', isAdmin ? '1' : '');
+
+    editUser(id, formData)
       .then((json) => {
-        navigate('/');
+        if (location.pathname.includes('sandbox')) {
+          navigate('/sandbox');
+        } else {
+          navigate('/');
+        }
         toast.success('User edited successfully.');
         fetchUser();
       })
@@ -257,7 +270,28 @@ const EditUser = ({ fetchUser }: EditUserProps) => {
             ></input>
             <label className="form-check-label mb-2">Sign up as Business</label>
           </div>
-
+          <div className="d-flex">
+            <input
+              type="file"
+              className="form-control"
+              onChange={(e) => {
+                if (e.target.files) {
+                  setImage(e.target.files[0]);
+                }
+              }}
+            />
+          </div>
+          {loggedInUser?.isAdmin && (
+            <div className="form-check box d-flex">
+              <input
+                className="form-check me-2 mb-2"
+                type="checkbox"
+                checked={isAdmin}
+                onChange={() => setIsAdmin(!isAdmin)}
+              ></input>
+              <label className="form-check-label mb-2">Admin</label>
+            </div>
+          )}
           <button
             onClick={handleSubmit}
             className="w-100 mb-2 btn btn-lg btn-primary border rounded-3 modal-submit-btn"

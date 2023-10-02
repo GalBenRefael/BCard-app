@@ -32,10 +32,6 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: false,
   },
-  imageAlt: {
-    type: String,
-    required: false,
-  },
   state: {
     type: String,
   },

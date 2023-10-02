@@ -1,12 +1,13 @@
-import { CardProps } from '../interfaces/Card';
+import { CardProps, CardWithLikes } from '../interfaces/Card';
 import { User } from '../interfaces/User';
 import { getToken } from '../auth/TokenManager';
 
-const serverUrl = 'http://localhost:3001/api/';
-const userUrl = `${serverUrl}users/`;
-const cardUrl = `${serverUrl}cards/`;
+export const baseUrl = 'http://localhost:3001/';
+const apiUrl = baseUrl + 'api/';
+const userUrl = `${apiUrl}users/`;
+const cardUrl = `${apiUrl}cards/`;
 
-export async function getCards(): Promise<Array<CardProps>> {
+export async function getCards(): Promise<CardWithLikes[]> {
   const res = await fetch(`${cardUrl}`);
   return res.json();
 }
@@ -32,6 +33,9 @@ export async function editCard(
     },
     body: JSON.stringify(card),
   });
+  if (!res.ok) {
+    throw new Error(await res.text());
+  }
   return res.json();
 }
 
@@ -102,14 +106,16 @@ export async function getUsers(): Promise<Array<User>> {
   return res.json();
 }
 
-export async function editUser(user: User): Promise<User> {
-  const res = await fetch(`${userUrl}${user._id}`, {
+export async function editUser(
+  userId: string,
+  formData: FormData
+): Promise<User> {
+  const res = await fetch(`${userUrl}${userId}`, {
     method: 'PATCH',
     headers: {
-      'Content-Type': 'application/json',
       'x-auth-token': getToken(),
     },
-    body: JSON.stringify(user),
+    body: formData,
   });
   if (!res.ok) {
     const data = await res.json();
@@ -142,13 +148,10 @@ export async function favorite(
 
 type NewUser = Omit<User, '_id' | 'favorites'>;
 
-export async function register(user: NewUser): Promise<User> {
+export async function register(formData: FormData): Promise<User> {
   const res = await fetch(`${userUrl}register`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(user),
+    body: formData,
   });
 
   if (!res.ok) {
@@ -185,6 +188,34 @@ export async function login(user: {
   return res.json();
 }
 
+export async function resetPassword({
+  code,
+  newPassword,
+}: {
+  code: string;
+  newPassword: string;
+}): Promise<any> {
+  const res = await fetch(`${userUrl}reset-password`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      code,
+      newPassword,
+    }),
+  });
+  if (!res.ok) {
+    const data = await res.json();
+    if (data.details) {
+      throw new Error(data.details.map((err: any) => err.message).join(', '));
+    } else {
+      throw new Error(data.message);
+    }
+  }
+  return res.json();
+}
+
 export async function verifyToken(): Promise<User | undefined> {
   const token = getToken();
   if (!token) {
@@ -198,6 +229,21 @@ export async function verifyToken(): Promise<User | undefined> {
   });
   if (!res.ok) {
     throw new Error();
+  }
+  return res.json();
+}
+
+export async function startPasswordReset(email: string) {
+  const res = await fetch(`${userUrl}start-password-reset`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ email }),
+  });
+  if (!res.ok) {
+    const { message } = await res.json();
+    throw new Error(message);
   }
   return res.json();
 }

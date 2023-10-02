@@ -1,33 +1,28 @@
-import { FormEvent, useContext, useState } from 'react';
+import { useContext, useState } from 'react';
 import FormLayout from '../../components/FormLayout';
 import Title from '../../components/Title';
 import { toast } from 'react-toastify';
-import './Login.css';
 import { useNavigate, Link } from 'react-router-dom';
-import User from '../Signup/Signup';
 import { NavLink } from 'react-router-dom';
 
-import { setToken } from '../TokenManager';
-import { login, startPasswordReset } from '../../services/ApiService';
+import { resetPassword, startPasswordReset } from '../../services/ApiService';
 import { AppContext } from '../../App';
 
-interface LoginProps {
-  fetchUser: () => void;
-}
+interface ResetPasswordProps {}
 
-function Login({ fetchUser }: LoginProps) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+export function ResetPassword({}: ResetPasswordProps) {
+  const [code, setCode] = useState('');
+  const [newPassword, setNewPassword] = useState('');
   const context = useContext(AppContext);
   const navigate = useNavigate();
 
   function validate(): boolean {
-    if (!email.includes('@')) {
-      toast.error('email is invalid.');
+    if (!code) {
+      toast.error('code is required.');
       return false;
     }
 
-    if (!password || password.length < 8) {
+    if (!newPassword || newPassword.length < 8) {
       toast.error('Password must contain at least 8 characters');
       return false;
     }
@@ -36,43 +31,37 @@ function Login({ fetchUser }: LoginProps) {
   }
 
   function clearFields() {
-    setEmail('');
-    setPassword('');
+    setCode('');
+    setNewPassword('');
   }
 
-  function handleSubmit(e: FormEvent) {
-    e.preventDefault();
+  async function handleClick() {
     const isValid = validate();
     if (!isValid) {
       return;
     }
-    login({
-      email,
-      password,
-    })
-      .then((user) => {
-        setToken(user.token);
-        if (context) {
-          context.setUser(user);
-        }
-        fetchUser();
-        navigate('/');
-        toast.success(`Welcome ${user.firstName}`);
-      })
-      .catch((error) => {
-        console.log(error);
-        if (error instanceof Error) {
-          toast.error(error.message);
-        }
+
+    try {
+      const user = await resetPassword({
+        code,
+        newPassword,
       });
+      navigate('/login');
+      toast.success(`Password was reset succesfully`);
+    } catch (error) {
+      console.log(error);
+      if (error instanceof Error) {
+        toast.error(error.message);
+      }
+    }
   }
 
   const handleResetPassword = async () => {
-    if (!email) {
+    if (!code) {
       return toast.error('Please fill your email');
     }
     try {
-      await startPasswordReset(email);
+      await startPasswordReset(code);
       navigate('/reset-password');
     } catch (error: any) {
       toast.error(error.message);
@@ -81,29 +70,29 @@ function Login({ fetchUser }: LoginProps) {
 
   return (
     <>
-      <Title mainText="Login" />
+      <Title mainText="Reset password" />
 
       <FormLayout>
-        <form onSubmit={handleSubmit}>
+        <form>
           <div className="form-floating left-input2">
             <input
-              type="email"
+              type="text"
               className="form-control"
               id="floatingInput"
-              placeholder="Email"
-              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Code"
+              onChange={(e) => setCode(e.target.value)}
             />
-            <label htmlFor="floatingInput">Email</label>
+            <label htmlFor="floatingInput">Code</label>
           </div>
           <div className="form-floating right-input2">
             <input
               type="password"
               className="form-control"
               id="floatingPassword"
-              placeholder="Password"
-              onChange={(e) => setPassword(e.target.value)}
+              placeholder="New password"
+              onChange={(e) => setNewPassword(e.target.value)}
             />
-            <label htmlFor="floatingPassword">Password</label>
+            <label htmlFor="floatingPassword">New Password</label>
           </div>
 
           <div className="d-flex">
@@ -127,10 +116,11 @@ function Login({ fetchUser }: LoginProps) {
           </div>
           <div>
             <button
-              type="submit"
+              type="button"
               className="btn text-white bg-primary"
               id="submit2"
-              disabled={!email || !password}
+              onClick={handleClick}
+              disabled={!code || !newPassword}
             >
               Submit
             </button>
@@ -139,17 +129,9 @@ function Login({ fetchUser }: LoginProps) {
             <p>
               Don't have an account? <NavLink to="/register">Sign up</NavLink>
             </p>
-            <p>
-              Forgot your password?{' '}
-              <Link to="#" onClick={handleResetPassword}>
-                Reset Password
-              </Link>
-            </p>
           </div>
         </form>
       </FormLayout>
     </>
   );
 }
-
-export default Login;
