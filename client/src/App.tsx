@@ -9,7 +9,6 @@ import Signup from './auth/Signup/Signup';
 import { User } from './interfaces/User';
 import HomePage from './pages/Homepage/Homepage';
 import Edit from './pages/Edit';
-import CreateCard from './pages/CreateCard';
 import { createContext, useState } from 'react';
 import AdminGuard from './auth/AdminGuard';
 import SandBox from './pages/SANDBOX/SandBox';
@@ -26,6 +25,7 @@ import AboutPage from './pages/About/AboutPage';
 import EditUser from './pages/EditUser/EditUser';
 import { CardProps, CardWithLikes } from './interfaces/Card';
 import { ResetPassword } from './auth/ResetPassword/ResetPassword';
+import CreateCard from './pages/CreateCard/CreateCard';
 
 interface Context {
   user: User | undefined;

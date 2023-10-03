@@ -64,17 +64,19 @@ module.exports = {
       user.password = await bcrypt.hash(user.password, salt);
 
       const userId = user._id;
-      const ext = request.file.originalname.split('.').at(-1);
 
-      const fileName = userId + '.' + ext;
-      user.imageUrl = fileName;
+      if (request.file) {
+        const ext = request.file.originalname.split('.').at(-1);
+
+        const fileName = userId + '.' + ext;
+        user.imageUrl = fileName;
+        fs.renameSync(
+          request.file.path,
+          path.join(config.get('uploadsFolder'), fileName)
+        );
+      }
 
       await user.save();
-
-      fs.renameSync(
-        request.file.path,
-        path.join(config.get('uploadsFolder'), fileName)
-      );
 
       response.status(200).send(_.pick(user, ['_id', 'firstName', 'email']));
     } catch (err) {

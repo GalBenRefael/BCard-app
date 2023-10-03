@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { addCard } from '../services/ApiService';
-import Title from '../components/Title';
-import FormLayout from '../components/FormLayout';
+
 import './CreateCard.css';
-import { CategorySelect } from '../components/CategorySelect';
+import { addCard } from '../../services/ApiService';
+import Title from '../../components/Title';
+import FormLayout from '../../components/FormLayout';
+import { CategorySelect } from '../../components/CategorySelect';
 
 export interface CreateCardProps {
   fetchBusinesses: () => void;

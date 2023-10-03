@@ -19,11 +19,11 @@ export const CategorySelect = ({
       <option selected disabled>
         Selected business category
       </option>
-      <option value="dining">Dining</option>
-      <option value="construction">Construction</option>
-      <option value="electronics">Electronics</option>
-      <option value="leisure">Leisure</option>
-      <option value="flowers">Flowers</option>
+      <option value="Dining">Dining</option>
+      <option value="Construction">Construction</option>
+      <option value="Electronics">Electronics</option>
+      <option value="Leisure">Leisure</option>
+      <option value="Flowers">Flowers</option>
       {hasAllOption && <option value="">All</option>}
     </select>
   );

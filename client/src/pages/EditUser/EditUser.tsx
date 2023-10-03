@@ -270,17 +270,6 @@ const EditUser = ({ fetchUser, loggedInUser }: EditUserProps) => {
             ></input>
             <label className="form-check-label mb-2">Sign up as Business</label>
           </div>
-          <div className="d-flex">
-            <input
-              type="file"
-              className="form-control"
-              onChange={(e) => {
-                if (e.target.files) {
-                  setImage(e.target.files[0]);
-                }
-              }}
-            />
-          </div>
           {loggedInUser?.isAdmin && (
             <div className="form-check box d-flex">
               <input
@@ -292,6 +281,18 @@ const EditUser = ({ fetchUser, loggedInUser }: EditUserProps) => {
               <label className="form-check-label mb-2">Admin</label>
             </div>
           )}
+          <div className="d-flex">
+            <input
+              type="file"
+              className="form-control"
+              onChange={(e) => {
+                if (e.target.files) {
+                  setImage(e.target.files[0]);
+                }
+              }}
+            />
+          </div>
+
           <button
             onClick={handleSubmit}
             className="w-100 mb-2 btn btn-lg btn-primary border rounded-3 modal-submit-btn"
