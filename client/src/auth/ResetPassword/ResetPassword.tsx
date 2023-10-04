@@ -56,18 +56,6 @@ export function ResetPassword({}: ResetPasswordProps) {
     }
   }
 
-  const handleResetPassword = async () => {
-    if (!code) {
-      return toast.error('Please fill your email');
-    }
-    try {
-      await startPasswordReset(code);
-      navigate('/reset-password');
-    } catch (error: any) {
-      toast.error(error.message);
-    }
-  };
-
   return (
     <>
       <Title mainText="Reset password" />

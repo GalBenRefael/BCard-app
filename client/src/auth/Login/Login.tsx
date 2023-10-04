@@ -73,6 +73,7 @@ function Login({ fetchUser }: LoginProps) {
     }
     try {
       await startPasswordReset(email);
+      toast.success('Please check your email for the code');
       navigate('/reset-password');
     } catch (error: any) {
       toast.error(error.message);
